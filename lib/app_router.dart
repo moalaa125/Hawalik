@@ -1,0 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:hawalik/constants/strings.dart';
+import 'package:hawalik/presentation/screens/login_screen.dart';
+
+class AppRouter {
+  Route? genirateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case loginScreen:
+        return MaterialPageRoute(builder: (_) => LoginScreen());
+    }
+  }
+}
