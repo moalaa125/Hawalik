@@ -6,17 +6,9 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Set iOS deployment target to 15.0
-        script: |
-          find . -name "Podfile" -exec sed -i '' 's/platform :ios, .*/platform :ios, '\''15.0'\''/g' {} +
-          
       - name: Get Flutter Packages
         script: |
           flutter pub get
-          
-      - name: Install CocoaPods
-        script: |
-          cd ios && pod install --repo-update
           
       - name: Build Flutter iOS App
         script: |
