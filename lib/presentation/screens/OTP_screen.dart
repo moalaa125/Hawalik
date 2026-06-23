@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hawalik/constants/mycolors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+// ignore: must_be_immutable
 class OtpScreen extends StatelessWidget {
-   OtpScreen({super.key});
+  OtpScreen({super.key});
 
   final PhoneNumber = '+201024299900';
-   String? otpCode = '';
+  String? otpCode = '';
 
   Widget _buildIntroTexts() {
     return Column(
@@ -47,11 +48,15 @@ class OtpScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
       child: MaterialPinField(
+        autoDismissKeyboard: true,
+        keyboardType: TextInputType.number,
         length: 6,
-        onCompleted: (otp) => otpCode = otp  , // todo: lasa h3ml el logic 
-        onChanged: (value) => print('Changed: $value'), // todo: lasa h3ml el logic 
+        onCompleted: (otp) => otpCode = otp, // todo: lasa h3ml el logic
+        onChanged: (value) =>
+            print('Changed: $value'), // todo: lasa h3ml el logic
         theme: MaterialPinTheme(
           borderColor: Mycolors.blue,
+          focusedBorderColor: Mycolors.blue,
           cursorColor: Colors.black,
           fillColor: Colors.white,
           disabledColor: Colors.white,
