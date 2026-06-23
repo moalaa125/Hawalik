@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hawalik/constants/mycolors.dart';
+import 'package:hawalik/constants/strings.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key, this.phoneNumber});
 
   String? phoneNumber;
+
+
+
+  final GlobalKey phoneFormKey = GlobalKey();
 
   Widget _buildIntroTexts() {
     return Column(
@@ -95,7 +100,7 @@ class LoginScreen extends StatelessWidget {
     return flag;
   }
 
-  Widget _buildNextButton() {
+  Widget _buildNextButton(BuildContext context) {
     return Align(
       alignment: AlignmentGeometry.centerRight,
       child: ElevatedButton(
@@ -108,6 +113,10 @@ class LoginScreen extends StatelessWidget {
         ),
         onPressed: () {
           // todo: lsa h3mlha
+
+
+          Navigator.pushNamed(context, otpScreeen);
+
         },
         child: Text('Next', style: TextStyle(color: Colors.white)),
       ),
@@ -119,20 +128,19 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Form(  
-          key: UniqueKey(),
+        child: Form(
+          key: phoneFormKey,
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 32, vertical: 30),
             child: Column(
-              
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildIntroTexts(),
-                SizedBox(height: 20),
+                SizedBox(height: 60),
                 _buildPhoneNumberField(),
                 SizedBox(height: 70),
-            
-                _buildNextButton(),
+
+                _buildNextButton(context),
               ],
             ),
           ),
