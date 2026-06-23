@@ -56,6 +56,7 @@ class OtpScreen extends StatelessWidget {
             print('Changed: $value'), // todo: lasa h3ml el logic
         theme: MaterialPinTheme(
           borderColor: Mycolors.blue,
+          filledFillColor: Mycolors.LighBlue,
           focusedBorderColor: Mycolors.blue,
           cursorColor: Colors.black,
           fillColor: Colors.white,
