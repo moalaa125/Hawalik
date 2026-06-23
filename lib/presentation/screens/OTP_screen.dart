@@ -138,6 +138,7 @@ class OtpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 32, vertical: 30),
