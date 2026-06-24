@@ -1,16 +1,14 @@
-workflows:
-  ios-unsigned-ipa:
-    name: Build Unsigned IPA for Sideloadly
-    # CRITICAL: You must specify a macOS instance type to build iOS binaries
-    instance_type: mac_mini_m1 
-    environment:
-      flutter: stable
-      xcode: latest
-      cocoapods: default
-    scripts:
+scripts:
       - name: Get Flutter Packages
         script: |
+          # Clean the workspace first to wipe out the old 13.0 cache
+          flutter clean
           flutter pub get
+          
+      - name: Regenerate iOS Config for SPM
+        script: |
+          # This is the magic command! It forces Flutter to update SPM to 15.0
+          flutter build ios --config-only
           
       - name: Build Flutter iOS App
         script: |
@@ -18,17 +16,7 @@ workflows:
           
       - name: Package Unsigned IPA
         script: |
-          # Change directory to the build output folder first to keep paths clean
           cd build/ios/iphoneos
-          
-          # Create the required Payload directory structure for iOS
           mkdir -p Payload
-          
-          # Copy the compiled .app bundle into the Payload folder
           cp -R Runner.app Payload/
-          
-          # Compress it into a valid .ipa file
           zip -r Hawalik.ipa Payload/
-          
-    artifacts:
-      - build/ios/iphoneos/Hawalik.ipa
