@@ -11,7 +11,6 @@ class MapScreen extends StatelessWidget {
 
   final phoneNumber;
 
-  PhoneAuthCubit phoneAuthCubit = PhoneAuthCubit();
 
   Widget _buldPhoneNumberSubmittedBloc() {
     return BlocListener<PhoneAuthCubit, PhoneAuthState>(
@@ -21,8 +20,6 @@ class MapScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is Loading) {
           _showProgressLoading(context);
-        } else if (state is ErrorOccured) {
-          Navigator.pop(context);
         }
         if (state is PhoneNumberSubmitted) {
           Navigator.pop(context);
@@ -62,7 +59,8 @@ class MapScreen extends StatelessWidget {
 
   Widget _buildBackButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: ()async {
+        await BlocProvider.of<PhoneAuthCubit>(context).logOut();
         Navigator.pushReplacementNamed(context, loginScreen);
       },
       child: Text('back'),
@@ -71,6 +69,16 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: _buildBackButton(context)));
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(child: _buildBackButton(context)),
+            _buldPhoneNumberSubmittedBloc(),
+          ],
+        ),
+      ),
+    );
   }
 }

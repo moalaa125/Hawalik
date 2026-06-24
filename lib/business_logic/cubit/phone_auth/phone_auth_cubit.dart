@@ -64,6 +64,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
   }
 
   Future<void> logOut() async {
+    print('the user loggied out !');
     await FirebaseAuth.instance.signOut();
   }
 
