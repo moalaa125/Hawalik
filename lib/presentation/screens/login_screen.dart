@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawalik/business_logic/cubit/phone_auth/phone_auth_cubit.dart';
 import 'package:hawalik/constants/mycolors.dart';
 import 'package:hawalik/constants/strings.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 // ignore: must_be_immutable
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key, this.phoneNumber});
+class LoginScreen extends StatefulWidget {
+  LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isLoading = false;
   String? phoneNumber;
 
-
-
-  final GlobalKey phoneFormKey = GlobalKey();
-
+  final GlobalKey<FormState> _phoneFormKey = GlobalKey<FormState>();
   Widget _buildIntroTexts() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,15 +118,72 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          // todo: lsa h3mlha
+          setState(() {
+            isLoading = true;
+          });
+          _showProgressLoading();
 
-
-          Navigator.pushNamed(context, otpScreeen);
-
+          _register(context);
         },
         child: Text('Next', style: TextStyle(color: Colors.white)),
       ),
     );
+  }
+
+  Widget _buldPhoneNumberSubmittedBloc() {
+    return BlocListener<PhoneAuthCubit, PhoneAuthState>(
+      listenWhen: (previous, current) {
+        return previous != current;
+      },
+      listener: (context, state) {
+        if (state is Loading) {
+          _showProgressLoading();
+        }
+        if (state is PhoneNumberSubmitted) {
+          Navigator.pop(context);
+          Navigator.of(context).pushNamed(otpScreeen, arguments: phoneNumber);
+        }
+        if (state is ErrorOccured) {
+          Navigator.pop(context);
+          String errorMessage = (state.errorMessage);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              content: Text(errorMessage),
+            ),
+          );
+        }
+      },
+      child: Container(),
+    );
+  }
+
+  Future<void> _register(BuildContext context) async {
+    if (!_phoneFormKey.currentState!.validate()) {
+      Navigator.pop(context);
+      return;
+    } else {
+      Navigator.pop(context);
+      _phoneFormKey.currentState!.save();
+      BlocProvider.of<PhoneAuthCubit>(context).submetPhoneNumber(phoneNumber!);
+    }
+  }
+
+  void _showProgressLoading() {
+    if (isLoading == true) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: LoadingAnimationWidget.threeRotatingDots(
+              color: Colors.black,
+              size: 50,
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -129,7 +192,7 @@ class LoginScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Form(
-          key: phoneFormKey,
+          key: _phoneFormKey,
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 32, vertical: 30),
             child: Column(
@@ -139,8 +202,8 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: 60),
                 _buildPhoneNumberField(),
                 SizedBox(height: 70),
-
                 _buildNextButton(context),
+                _buldPhoneNumberSubmittedBloc(),
               ],
             ),
           ),
