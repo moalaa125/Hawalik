@@ -7,16 +7,11 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 // ignore: must_be_immutable
-class OtpScreen extends StatefulWidget {
+class OtpScreen extends StatelessWidget {
   OtpScreen({super.key, required this.phoneNumber});
 
   final phoneNumber;
 
-  @override
-  State<OtpScreen> createState() => _OtpScreenState();
-}
-
-class _OtpScreenState extends State<OtpScreen> {
   late String otpCode;
 
   // String? otpCode = '';
@@ -43,7 +38,7 @@ class _OtpScreenState extends State<OtpScreen> {
               style: TextStyle(color: Colors.black, fontSize: 18, height: 1.4),
               children: <TextSpan>[
                 TextSpan(
-                  text: widget.phoneNumber,
+                  text: phoneNumber,
                   style: TextStyle(
                     color: Mycolors.blue,
                     fontWeight: FontWeight.bold,
@@ -64,9 +59,8 @@ class _OtpScreenState extends State<OtpScreen> {
         autoDismissKeyboard: true,
         keyboardType: TextInputType.number,
         length: 6,
-        onCompleted: (otp) => otpCode = otp, // todo: lasa h3ml el logic
-        onChanged: (value) =>
-            print('Changed: $value'), // todo: lasa h3ml el logic
+        onCompleted: (otp) => otpCode = otp,
+        onChanged: (value) => print('Changed: $value'),
         theme: MaterialPinTheme(
           borderColor: Mycolors.blue,
           filledFillColor: Mycolors.LighBlue,
@@ -85,7 +79,7 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  Widget _buildDontRecieveCodeSection() {
+  Widget _buildDontRecieveCodeSection(BuildContext context) {
     return Column(
       children: [
         Text(
@@ -99,9 +93,11 @@ class _OtpScreenState extends State<OtpScreen> {
             children: [
               Expanded(
                 child: TextButton(
-                  onPressed: null,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   child: Text(
-                    'resend code',
+                    'change the number',
                     style: TextStyle(color: Mycolors.blue),
                   ),
                 ),
@@ -115,7 +111,7 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               Expanded(
                 child: TextButton(
-                  onPressed: null,
+                  onPressed: () => null,
                   child: Text(
                     'resend code',
                     style: TextStyle(color: Mycolors.blue),
@@ -141,14 +137,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
         ),
         onPressed: () {
-          setState(() {
-            isLoading = true;
-          });
-          _showProgressLoading;
           _login(context);
-          setState(() {
-            isLoading = false ;
-          });
         },
         child: Text('Verify', style: TextStyle(color: Colors.white)),
       ),
@@ -189,7 +178,7 @@ class _OtpScreenState extends State<OtpScreen> {
           Navigator.of(context).pushReplacementNamed(mapScreen);
         }
         if (state is ErrorOccured) {
-          Navigator.pop(context);
+          // Navigator.pop(context);
           String errorMessage = (state.errorMessage);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -221,7 +210,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 SizedBox(height: 30),
                 _buildVerifyButton(context),
                 SizedBox(height: 30),
-                _buildDontRecieveCodeSection(),
+                _buildDontRecieveCodeSection(context),
                 _buildPhoneVerificationBloc(),
               ],
             ),

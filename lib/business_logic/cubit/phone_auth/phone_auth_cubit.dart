@@ -35,7 +35,8 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
     print('code sent');
 
     this.verificationId = verificationId;
-    emit(PhoneNumberSubmitted());
+     
+    emit(PhoneNumberSubmitted()); 
   }
 
   void codeAutoRetrievalTimeout(String verificationId) {
@@ -43,6 +44,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
   }
 
   Future<void> submitOTP(String otpCode) async {
+    emit(Loading());
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
       verificationId: this.verificationId,
       smsCode: otpCode,
