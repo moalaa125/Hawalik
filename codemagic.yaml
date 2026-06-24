@@ -1,6 +1,8 @@
 workflows:
   ios-unsigned-ipa:
     name: Build Unsigned IPA for Sideloadly
+    # CRITICAL: You must specify a macOS instance type to build iOS binaries
+    instance_type: mac_mini_m1 
     environment:
       flutter: stable
       xcode: latest
@@ -16,9 +18,16 @@ workflows:
           
       - name: Package Unsigned IPA
         script: |
-          mkdir -p build/ios/iphoneos/Payload
-          mv build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/
+          # Change directory to the build output folder first to keep paths clean
           cd build/ios/iphoneos
+          
+          # Create the required Payload directory structure for iOS
+          mkdir -p Payload
+          
+          # Copy the compiled .app bundle into the Payload folder
+          cp -R Runner.app Payload/
+          
+          # Compress it into a valid .ipa file
           zip -r Hawalik.ipa Payload/
           
     artifacts:
