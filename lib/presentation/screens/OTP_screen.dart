@@ -145,19 +145,17 @@ class OtpScreen extends StatelessWidget {
   }
 
   void _showProgressLoading(BuildContext context) {
-    if (isLoading == true) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: LoadingAnimationWidget.threeRotatingDots(
-              color: Colors.black,
-              size: 50,
-            ),
-          );
-        },
-      );
-    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: LoadingAnimationWidget.threeRotatingDots(
+            color: Colors.black,
+            size: 50,
+          ),
+        );
+      },
+    );
   }
 
   void _login(BuildContext context) {
@@ -175,7 +173,9 @@ class OtpScreen extends StatelessWidget {
         }
         if (state is phoneOtpVerified) {
           Navigator.pop(context);
-          Navigator.of(context).pushReplacementNamed(mapScreen);
+          Navigator.of(
+            context,
+          ).pushReplacementNamed(mapScreen, arguments: phoneNumber);
         }
         if (state is ErrorOccured) {
           // Navigator.pop(context);

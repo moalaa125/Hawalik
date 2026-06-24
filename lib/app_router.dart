@@ -32,10 +32,12 @@ class AppRouter {
           ),
         );
       case mapScreen:
+        final phoneNumber = settings.arguments;
+
         return MaterialPageRoute(
           builder: (_) => BlocProvider<PhoneAuthCubit>.value(
             value: phoneAuthCubit!,
-            child: MapScreen(),
+            child: MapScreen(phoneNumber: phoneNumber),
           ),
         );
     }

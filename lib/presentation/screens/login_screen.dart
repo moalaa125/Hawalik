@@ -118,15 +118,28 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         onPressed: () {
-          setState(() {
-            isLoading = true;
-          });
           _showProgressLoading();
 
           _register(context);
         },
         child: Text('Next', style: TextStyle(color: Colors.white)),
       ),
+    );
+  }
+
+  _showProgressLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible:
+          false, // Prevents user from dismissing it by tapping outside
+      builder: (BuildContext context) {
+        return Center(
+          child: LoadingAnimationWidget.threeRotatingDots(
+            color: Colors.black,
+            size: 50,
+          ),
+        );
+      },
     );
   }
 
@@ -170,21 +183,26 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _showProgressLoading() {
-    if (isLoading == true) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: LoadingAnimationWidget.threeRotatingDots(
-              color: Colors.black,
-              size: 50,
-            ),
-          );
-        },
-      );
-    }
-  }
+  // BlocListener<PhoneAuthCubit, PhoneAuthState>() {
+  //   Listener:
+  //   (context, state) {
+  //     if (state is Loading) {
+  //       showDialog(
+  //         context: context,
+  //         barrierDismissible:
+  //             false, // Prevents user from dismissing it by tapping outside
+  //         builder: (BuildContext context) {
+  //           return Center(
+  //             child: LoadingAnimationWidget.threeRotatingDots(
+  //               color: Colors.black,
+  //               size: 50,
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     }
+  //   };
+  // }
 
   @override
   Widget build(BuildContext context) {

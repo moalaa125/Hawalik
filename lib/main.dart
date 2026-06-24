@@ -16,8 +16,6 @@ void main() async {
   } else {
     initialRoute = mapScreen;
   }
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp(appRouter: AppRouter()));
 }
 
