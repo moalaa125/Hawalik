@@ -118,6 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         onPressed: () {
+          // Navigator.pop(context);
+
           _register(context);
         },
         child: Text('Next', style: TextStyle(color: Colors.white)),
@@ -149,13 +151,13 @@ class _LoginScreenState extends State<LoginScreen> {
       listener: (context, state) {
         if (state is Loading) {
           _showProgressLoading();
-        }
-        if (state is PhoneNumberSubmitted) {
-          Navigator.pop(context);
+        }else if (state is PhoneNumberSubmitted) {
+          Navigator.pop(context); // This safely closes the Loading dialog
           Navigator.of(context).pushNamed(otpScreeen, arguments: phoneNumber);
-        }
-        if (state is ErrorOccured) {
-          Navigator.pop(context);
+        } 
+        // ✅ MUST use "else if" here
+        else if (state is ErrorOccured) {
+          Navigator.pop(context); // This safely closes the Loading dialog
           String errorMessage = (state.errorMessage);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -165,6 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         }
+        
       },
       child: Container(),
     );
@@ -172,9 +175,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _register(BuildContext context) async {
     if (!_phoneFormKey.currentState!.validate()) {
+      // Navigator.pop(context);
       return;
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
       _phoneFormKey.currentState!.save();
       BlocProvider.of<PhoneAuthCubit>(context).submetPhoneNumber(phoneNumber!);
     }
