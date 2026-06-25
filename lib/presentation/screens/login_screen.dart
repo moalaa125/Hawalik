@@ -118,8 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         onPressed: () {
-          _showProgressLoading();
-
           _register(context);
         },
         child: Text('Next', style: TextStyle(color: Colors.white)),
@@ -174,7 +172,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _register(BuildContext context) async {
     if (!_phoneFormKey.currentState!.validate()) {
-      Navigator.pop(context);
       return;
     } else {
       Navigator.pop(context);
