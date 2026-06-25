@@ -5,9 +5,8 @@ import 'package:hawalik/constants/mycolors.dart';
 import 'package:hawalik/constants/strings.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-// ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -118,8 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         onPressed: () {
-          // Navigator.pop(context);
-
           _register(context);
         },
         child: Text('Next', style: TextStyle(color: Colors.white)),
@@ -130,8 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
   _showProgressLoading() {
     showDialog(
       context: context,
-      barrierDismissible:
-          false, // Prevents user from dismissing it by tapping outside
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Center(
           child: LoadingAnimationWidget.threeRotatingDots(
@@ -151,13 +147,11 @@ class _LoginScreenState extends State<LoginScreen> {
       listener: (context, state) {
         if (state is Loading) {
           _showProgressLoading();
-        }else if (state is PhoneNumberSubmitted) {
-          Navigator.pop(context); // This safely closes the Loading dialog
+        } else if (state is PhoneNumberSubmitted) {
+          Navigator.pop(context);
           Navigator.of(context).pushNamed(otpScreeen, arguments: phoneNumber);
-        } 
-        // ✅ MUST use "else if" here
-        else if (state is ErrorOccured) {
-          Navigator.pop(context); // This safely closes the Loading dialog
+        } else if (state is ErrorOccured) {
+          Navigator.pop(context);
           String errorMessage = (state.errorMessage);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -167,7 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         }
-        
       },
       child: Container(),
     );
@@ -175,35 +168,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _register(BuildContext context) async {
     if (!_phoneFormKey.currentState!.validate()) {
-      // Navigator.pop(context);
       return;
     } else {
-      // Navigator.pop(context);
       _phoneFormKey.currentState!.save();
       BlocProvider.of<PhoneAuthCubit>(context).submetPhoneNumber(phoneNumber!);
     }
   }
-
-  // BlocListener<PhoneAuthCubit, PhoneAuthState>() {
-  //   Listener:
-  //   (context, state) {
-  //     if (state is Loading) {
-  //       showDialog(
-  //         context: context,
-  //         barrierDismissible:
-  //             false, // Prevents user from dismissing it by tapping outside
-  //         builder: (BuildContext context) {
-  //           return Center(
-  //             child: LoadingAnimationWidget.threeRotatingDots(
-  //               color: Colors.black,
-  //               size: 50,
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     }
-  //   };
-  // }
 
   @override
   Widget build(BuildContext context) {
